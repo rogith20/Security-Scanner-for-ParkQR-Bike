@@ -1,9 +1,9 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 import 'history.dart';
 import 'scanqr.dart';
 
-String scannedCode = '';
 List<String> qrHistory = [];
 
 class HomePage extends StatefulWidget {
@@ -18,12 +18,17 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  String scannedCode = '';
+  CameraController? _cameraController;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(
         length: 2, initialIndex: widget.initialTabIndex, vsync: this);
+
+    // Initialize the camera controller only once when the HomePage is created
+    _initializeCamera();
   }
 
   void storeResult(String result) {
@@ -33,10 +38,26 @@ class _HomePageState extends State<HomePage>
     });
   }
 
+  Future<void> _initializeCamera() async {
+    final cameras = await availableCameras();
+    _cameraController = CameraController(cameras[0], ResolutionPreset.medium);
+    await _cameraController!.initialize();
+  }
+
   @override
   void dispose() {
+    // Dispose the camera controller only if it is not null
+    _cameraController?.dispose();
     _tabController.dispose();
     super.dispose();
+  }
+
+  void _resetCamera() {
+    // Dispose of the camera controller and reinitialize it
+    _cameraController?.dispose();
+    _initializeCamera().then((_) {
+      setState(() {}); // Trigger a rebuild after reinitialization
+    });
   }
 
   @override
@@ -108,7 +129,12 @@ class _HomePageState extends State<HomePage>
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  ScanQR(storeResult: storeResult),
+                  ScanQR(
+                    cameraController:
+                        _cameraController, // Pass the camera controller
+                    storeResult: storeResult,
+                    resetCamera: _resetCamera, // Pass the resetCamera function
+                  ),
                   HistoryPage(qrHistory: qrHistory),
                 ],
               ),
