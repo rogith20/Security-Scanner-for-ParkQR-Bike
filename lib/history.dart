@@ -19,31 +19,38 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        itemCount: widget.qrHistory.length,
-        itemBuilder: (context, index) {
-          String code = widget.qrHistory[index];
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(15,2,15,2),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6.0),
+      body: widget.qrHistory.length == 0
+          ? Container(
+              child: Center(
+                child: Text("No Scans Yet"),
               ),
-              child: ListTile(
-                tileColor: Color(0xffF2F4FF),
-                title: Text(
-                  code,
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
-                trailing: IconButton(
-                  icon: Icon(Icons.delete_outline, color: Colors.red),
-                  onPressed: () => deleteQRCode(index),
-                ),
-              ),
+            )
+          : ListView.builder(
+              itemCount: widget.qrHistory.length,
+              // reverse: true,
+              itemBuilder: (context, index) {
+                String code = widget.qrHistory[index];
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 2, 15, 2),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6.0),
+                    ),
+                    child: ListTile(
+                      tileColor: Color(0xffF2F4FF),
+                      title: Text(
+                        code,
+                        style: TextStyle(fontSize: 16, color: Colors.black),
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete_outline, color: Colors.red),
+                        onPressed: () => deleteQRCode(index),
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }

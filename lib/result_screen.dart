@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:security_scanner/homepage.dart';
 
 class ResultScreen extends StatelessWidget {
   final String code;
@@ -43,8 +44,14 @@ class ResultScreen extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.popUntil(context, ModalRoute.withName('/homepage')); // Go back to the HomePage
-                      Navigator.pop(context); // Go back to the ScanQR page
+                      // Navigator.popUntil(context, ModalRoute.withName('/homepage')); // Go back to the HomePage
+                      // Navigator.pop(context); // Go back to the ScanQR page
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => HomePage(initialTabIndex: 1)),
+                        (Route<dynamic> route) => false,
+                      );
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.red),
@@ -60,7 +67,8 @@ class ResultScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       if (storeResult != null) {
-                        storeResult!(code); // Call the storeResult function if it's not null
+                        storeResult!(
+                            code); // Call the storeResult function if it's not null
                       }
                       Navigator.pop(context); // Go back to the ScanQR page
                     },

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'history.dart';
 import 'scanqr.dart';
+
+String scannedCode = '';
+List<String> qrHistory = [];
 
 class HomePage extends StatefulWidget {
   final int initialTabIndex;
@@ -8,19 +12,18 @@ class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.initialTabIndex}) : super(key: key);
 
   @override
-   State<HomePage> createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
-
-  String scannedCode = '';
-  List<String> qrHistory = [];
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, initialIndex: widget.initialTabIndex, vsync: this);
+    _tabController = TabController(
+        length: 2, initialIndex: widget.initialTabIndex, vsync: this);
   }
 
   void storeResult(String result) {
@@ -63,9 +66,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   preferredSize: const Size.fromHeight(70.0),
                   child: TabBar(
                     controller: _tabController,
+                    indicator: null,
                     indicatorSize: TabBarIndicatorSize.label,
                     indicatorWeight: 2.0,
-                    indicatorPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    indicatorPadding:
+                        const EdgeInsets.symmetric(horizontal: 8.0),
                     tabs: const [
                       Tab(
                         child: Row(
@@ -90,7 +95,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     ],
                     indicatorColor: const Color(0xff3555eb),
                     labelColor: const Color(0xff3555eb),
-                    unselectedLabelColor: const Color(0xff666791),
+                    // unselectedLabelColor: const Color(0xff666791),
                   ),
                 ),
               ),

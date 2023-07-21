@@ -46,25 +46,30 @@ class _ScanQRState extends State<ScanQR> {
             ),
             Expanded(
               flex: 3,
-              child: MobileScanner(
-                allowDuplicates: true,
-                onDetect: (barcode, args) {
-                  if (!isScanCompleted) {
-                    String code = barcode.rawValue ?? "---";
-                    isScanCompleted = true;
-                    widget.storeResult!(code); // Call the storeResult callback
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ResultScreen(
-                          code: code,
-                          closeScreen: closeScreen,
-                          storeResult: widget.storeResult, // Pass the storeResult callback to ResultScreen
+              child: Container(
+                decoration:
+                    BoxDecoration(border: Border.all(color: Colors.red)),
+                child: MobileScanner(
+                  allowDuplicates: true,
+                  onDetect: (barcode, args) {
+                    if (!isScanCompleted) {
+                      String code = barcode.rawValue ?? "---";
+                      isScanCompleted = true;
+                      // widget.storeResult!(code); // Call the storeResult callback
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ResultScreen(
+                            code: code,
+                            closeScreen: closeScreen,
+                            storeResult: widget
+                                .storeResult, // Pass the storeResult callback to ResultScreen
+                          ),
                         ),
-                      ),
-                    );
-                  }
-                },
+                      );
+                    }
+                  },
+                ),
               ),
             ),
             Expanded(
